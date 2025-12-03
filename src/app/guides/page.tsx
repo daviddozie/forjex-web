@@ -94,9 +94,8 @@ export default function Guides() {
                         <div className="rounded-md flex mt-10 justify-between items-center text-[#848484] border px-4 py-4 font-mono text-sm mx-auto">
                             <p className="text-[#848484]">
                                 <span className="text-[#585858] pr-4">$</span>
-                                npm install -g forjex
+                                forjex forge
                             </p>
-
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button variant="link" onClick={handleCopy} className="p-0 hover:dark:bg-[#535353] hover:bg-gray-200">
