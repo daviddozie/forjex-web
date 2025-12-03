@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "../ui/button"
 import { Copy, Check } from "lucide-react"
+import { useRouter } from "next/navigation"
 import {
     Tooltip,
     TooltipContent,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/tooltip"
 
 export const Hero = () => {
+    const route = useRouter();
     const [copied, setCopied] = useState(false);
 
     const handleCopy = async () => {
@@ -29,10 +31,11 @@ export const Hero = () => {
                 </p>
             </div>
             <div className="flex items-center justify-center gap-4 mt-10">
-                <Button className="md:w-[200px] h-11 w-full flex-1 md:flex-none">
+                <Button className="md:w-[200px] h-11 w-full flex-1 md:flex-none" onClick={() => route.push('/guides')}>
                     Get Started
                 </Button>
-                <Button variant="outline" className="md:w-[200px] h-11 w-full flex-1 md:flex-none">
+                <Button variant="outline" className="md:w-[200px] h-11 w-full flex-1 md:flex-none" 
+                onClick={() => route.push('/docs')}>
                     Read Docs
                 </Button>
             </div>

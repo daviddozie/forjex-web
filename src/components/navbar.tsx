@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 import { ThemeToggle } from "./ui/theme-toggle";
 import { Button } from "./ui/button";
-import { div } from "framer-motion/client";
 import { Logo } from "./svg";
+import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -100,7 +100,7 @@ export const Navbar = () => {
 
                 <div className="hidden md:flex items-center gap-4">
                     <ThemeToggle />
-                    <Button>
+                    <Button onClick={() => router.push('/guides')}>
                         Get Started
                     </Button>
                 </div>
@@ -151,7 +151,7 @@ export const Navbar = () => {
                                 </>
                             );
                         })}
-                        <Button>
+                        <Button onClick={() => router.push('/guides')}>
                             Get Started
                         </Button>
                     </motion.nav>
