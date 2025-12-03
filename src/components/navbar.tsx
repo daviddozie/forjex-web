@@ -20,10 +20,11 @@ export const Navbar = () => {
     const pathname = usePathname();
 
     const navLinks = [
-        { name: "Feature", href: "/feature" },
+        { name: "Home", href: "/" },
         { name: "Docs", href: "/docs" },
-        { name: "API", href: "/api" },
         { name: "Guides", href: "/guides" },
+        { name: "Feature", href: "#" },
+        { name: "API", href: "#" },
     ];
 
     useEffect(() => setMounted(true), []);

@@ -11,8 +11,8 @@
 }
 
 :root.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #000000;
+  --foreground: #fafafa;
 }
 
 .font-mono {
