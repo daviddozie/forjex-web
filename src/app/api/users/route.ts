@@ -37,6 +37,8 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const { name, username, avatar, profileUrl, timestamp } = body;
 
+        console.log('Received user data:', { name, username, avatar }); // Debug log
+
         if (!username) {
             return NextResponse.json(
                 { error: 'Username is required' },
@@ -68,6 +70,8 @@ export async function POST(request: NextRequest) {
 
         await saveUsers(users);
 
+        console.log('User saved successfully:', userData); // Debug log
+
         return NextResponse.json({ success: true, user: userData });
     } catch (error) {
         console.error('Error saving user:', error);
@@ -82,6 +86,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
     try {
         const users = await getUsers();
+        console.log('Fetching users:', users.length); // Debug log
         return NextResponse.json({ users });
     } catch (error) {
         console.error('Error fetching users:', error);
