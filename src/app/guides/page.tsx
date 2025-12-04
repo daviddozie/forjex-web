@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
 import { Copy, Check } from "lucide-react"
-import { run } from "node:test"
 
 export default function Guides() {
 
@@ -21,20 +20,19 @@ export default function Guides() {
         bun: "bun add -g forjex"
     };
     const [selected, setSelected] = useState<keyof typeof packageManagers>("npm");
-    const [copied, setCopied] = useState(false);
+    const [packageCopied, setPackageCopied] = useState(false);
+    const [runCopied, setRunCopied] = useState(false);
 
     const handleCopy = async () => {
         await navigator.clipboard.writeText(packageManagers[selected]);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000);
+        setPackageCopied(true);
+        setTimeout(() => setPackageCopied(false), 3000);
     };
 
     const runCopy = async () => {
         await navigator.clipboard.writeText("forjex forge");
-
-        setCopied(true);
-
-        setTimeout(() => setCopied(false), 3000);
+        setRunCopied(true);
+        setTimeout(() => setRunCopied(false), 3000);
     };
 
 
@@ -75,7 +73,7 @@ export default function Guides() {
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button variant="link" onClick={handleCopy} className="p-0 hover:dark:bg-[#535353] hover:bg-gray-200">
-                                        {copied ? (
+                                        {packageCopied ? (
                                             <Check className="dark:text-white transition-all duration-200" />
                                         ) : (
                                             <Copy className="text-[#848484] transition-all duration-200" />
@@ -84,7 +82,7 @@ export default function Guides() {
                                 </TooltipTrigger>
 
                                 <TooltipContent className="transition-all duration-200">
-                                    <p>{copied ? "Copied!" : "Copy to Clipboard"}</p>
+                                    <p>{packageCopied ? "Copied!" : "Copy to Clipboard"}</p>
                                 </TooltipContent>
                             </Tooltip>
                         </div>
@@ -100,7 +98,7 @@ export default function Guides() {
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button variant="link" onClick={runCopy} className="p-0 hover:dark:bg-[#535353] hover:bg-gray-200">
-                                        {copied ? (
+                                        {runCopied ? (
                                             <Check className="dark:text-white transition-all duration-200" />
                                         ) : (
                                             <Copy className="text-[#848484] transition-all duration-200" />
@@ -109,7 +107,7 @@ export default function Guides() {
                                 </TooltipTrigger>
 
                                 <TooltipContent className="transition-all duration-200">
-                                    <p>{copied ? "Copied!" : "Copy to Clipboard"}</p>
+                                    <p>{runCopied ? "Copied!" : "Copy to Clipboard"}</p>
                                 </TooltipContent>
                             </Tooltip>
                         </div>
