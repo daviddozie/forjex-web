@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://forjex-web.vercel.app/"),
   title: {
-    default: "Forjex — Automate Your Git Workflow",
+    default: "Forjex",
     template: "%s | Forjex"
   },
   description:
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://forjex-web.vercel.app/",
-    title: "Forjex — Automate Your Git Workflow",
+    title: "Forjex",
     description:
       "Forjex is a powerful CLI tool that helps developers generate new repositories, automate setups, streamline project creation, and generate perfect commit messages.",
     siteName: "Forjex",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
         url: "https://vocational-brown-pigctefcj5-fiqs263154.edgeone.dev/Screenshot%202025-12-04%20at%204.05.52%E2%80%AFPM.png",
         width: 1200,
         height: 630,
-        alt: "Forjex — Git Automation Tool",
+        alt: "Forjex",
       },
     ],
   },
@@ -83,6 +83,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
