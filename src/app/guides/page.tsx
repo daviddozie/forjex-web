@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
 import { Copy, Check } from "lucide-react"
+import { run } from "node:test"
 
 export default function Guides() {
 
@@ -22,17 +23,17 @@ export default function Guides() {
     const [selected, setSelected] = useState<keyof typeof packageManagers>("npm");
     const [copied, setCopied] = useState(false);
 
-    const runCopy = async () => {
-        await navigator.clipboard.writeText("npm install -g forjex");
-
-        setCopied(true);
-
-        setTimeout(() => setCopied(false), 3000);
-    };
-
     const handleCopy = async () => {
         await navigator.clipboard.writeText(packageManagers[selected]);
         setCopied(true);
+        setTimeout(() => setCopied(false), 3000);
+    };
+
+    const runCopy = async () => {
+        await navigator.clipboard.writeText("forjex forge");
+
+        setCopied(true);
+
         setTimeout(() => setCopied(false), 3000);
     };
 
@@ -98,7 +99,7 @@ export default function Guides() {
                             </p>
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Button variant="link" onClick={handleCopy} className="p-0 hover:dark:bg-[#535353] hover:bg-gray-200">
+                                    <Button variant="link" onClick={runCopy} className="p-0 hover:dark:bg-[#535353] hover:bg-gray-200">
                                         {copied ? (
                                             <Check className="dark:text-white transition-all duration-200" />
                                         ) : (
