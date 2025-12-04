@@ -9,6 +9,7 @@ import { ThemeToggle } from "./ui/theme-toggle";
 import { Button } from "./ui/button";
 import { Logo } from "./svg";
 import { useRouter } from "next/navigation";
+import GitHubStars from "./github-star";
 
 export const Navbar = () => {
     const router = useRouter();
@@ -97,12 +98,12 @@ export const Navbar = () => {
                         );
                     })}
                 </nav>
-
                 <div className="hidden md:flex items-center gap-4">
                     <ThemeToggle />
                     <Button onClick={() => router.push('/guides')}>
                         Get Started
                     </Button>
+                    <GitHubStars />
                 </div>
                 <button
                     className="hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700"
@@ -113,6 +114,7 @@ export const Navbar = () => {
                 </button>
                 <div className="flex items-center gap-4 md:hidden">
                     <ThemeToggle />
+                     <GitHubStars />
                     <button
                         className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700"
                         onClick={() => setIsOpen(!isOpen)}
