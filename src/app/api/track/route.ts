@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -24,40 +23,46 @@ export async function OPTIONS() {
     return NextResponse.json({}, { headers: CORS_HEADERS });
 }
 
-// POST - track CLI usage
+// POST - track CLI usage using the PostgreSQL function
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const { username, email, os, command, timestamp } = body;
 
+        // Validate input
         if (!username && !email) {
-            return NextResponse.json({ error: "username or email required" }, { status: 400, headers: CORS_HEADERS });
+            return NextResponse.json(
+                { error: "username or email required" }, 
+                { status: 400, headers: CORS_HEADERS }
+            );
         }
 
         const now = timestamp || new Date().toISOString();
 
-        const { error } = await supabase
-            .from("cli_tracking")
-            .upsert(
-                {
-                    username: username || null,
-                    email: email || null,
-                    os: os || {},
-                    command: command || null,
-                    last_used: now,
-                    created_at: now
-                },
-                { onConflict: "username,email" }
-            );
+        // Call the PostgreSQL function to handle upsert with increment
+        const { data, error } = await supabase.rpc('increment_cli_usage', {
+            p_username: username || null,
+            p_email: email || null,
+            p_command: command || null,
+            p_timestamp: now,
+            p_os: os || {}
+        });
+
         if (error) {
-            console.error("Supabase upsert error:", error);
-            return NextResponse.json({ error: error.message }, { status: 500, headers: CORS_HEADERS });
+            console.error("Supabase RPC error:", error);
+            return NextResponse.json(
+                { error: error.message }, 
+                { status: 500, headers: CORS_HEADERS }
+            );
         }
 
         return NextResponse.json({ success: true }, { headers: CORS_HEADERS });
     } catch (err: any) {
         console.error("API /api/track POST error:", err);
-        return NextResponse.json({ error: err.message || "unknown" }, { status: 500, headers: CORS_HEADERS });
+        return NextResponse.json(
+            { error: err.message || "unknown" }, 
+            { status: 500, headers: CORS_HEADERS }
+        );
     }
 }
 
@@ -66,13 +71,20 @@ export async function GET() {
     try {
         const { data: users, error } = await supabase
             .from("cli_tracking")
-            .select("username,email,os,command,usage_count,last_used,timestamp,created_at")
+            .select("id, username, email, os, command, usage_count, last_used, timestamp, created_at")
             .order("last_used", { ascending: false });
-        if (error) throw error;
+
+        if (error) {
+            console.error("Supabase GET error:", error);
+            throw error;
+        }
 
         return NextResponse.json({ users: users || [] }, { headers: CORS_HEADERS });
     } catch (err: any) {
         console.error("API /api/track GET error:", err);
-        return NextResponse.json({ error: err.message || "unknown" }, { status: 500, headers: CORS_HEADERS });
+        return NextResponse.json(
+            { error: err.message || "unknown" }, 
+            { status: 500, headers: CORS_HEADERS }
+        );
     }
 }
