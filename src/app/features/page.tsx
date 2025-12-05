@@ -17,12 +17,14 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { ExternalLink } from "lucide-react"
 
 interface User {
-    name: string
-    username: string
-    avatar: string
-    profileUrl: string
-    lastUsed: string
-    usageCount: number
+    id: string
+    username: string | null
+    email: string | null
+    os: any
+    command: string | null
+    usage_count: number
+    last_used: string
+    created_at: string
 }
 
 export default function Features() {
@@ -45,8 +47,12 @@ export default function Features() {
         }
     }
 
+    const getDisplayName = (user: User) => {
+        return user.username || user.email || "Unknown User"
+    }
+
     const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
+        return new Date(dateString).toLocaleString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
@@ -74,18 +80,18 @@ export default function Features() {
                                     ? `A list of ${users.length} developers using Forjex`
                                     : 'No users yet. Be the first to use Forjex!'}
                             </TableCaption>
+
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-[35%]">User</TableHead>
-                                    <TableHead className="w-[20%]">Username</TableHead>
-                                    <TableHead className="w-[15%]">Usage Count</TableHead>
-                                    <TableHead className="w-[20%]">Last Used</TableHead>
-                                    <TableHead className="w-[10%] text-right">Profile</TableHead>
+                                    <TableHead>User</TableHead>
+                                    <TableHead>Usage Count</TableHead>
+                                    <TableHead>Last Used</TableHead>
+                                    <TableHead className="text-right">GitHub</TableHead>
                                 </TableRow>
                             </TableHeader>
+
                             <TableBody>
                                 {loading ? (
-                                    // Loading skeletons
                                     Array.from({ length: 5 }).map((_, i) => (
                                         <TableRow key={i}>
                                             <TableCell>
@@ -94,50 +100,55 @@ export default function Features() {
                                                     <Skeleton className="h-4 w-32" />
                                                 </div>
                                             </TableCell>
-                                            <TableCell><Skeleton className="h-4 w-24" /></TableCell>
                                             <TableCell><Skeleton className="h-4 w-12" /></TableCell>
                                             <TableCell><Skeleton className="h-4 w-32" /></TableCell>
                                             <TableCell><Skeleton className="h-4 w-16 ml-auto" /></TableCell>
                                         </TableRow>
                                     ))
                                 ) : users.length > 0 ? (
-                                    users.map((user) => (
-                                        <TableRow key={user.username}>
-                                            <TableCell>
-                                                <div className="flex items-center gap-3">
-                                                    <Avatar>
-                                                        <AvatarImage src={user.avatar} alt={user.name} />
-                                                        <AvatarFallback>
-                                                            {user.name.slice(0, 2).toUpperCase()}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                    <span className="font-medium">{user.name}</span>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-muted-foreground">
-                                                @{user.username}
-                                            </TableCell>
-                                            <TableCell>
-                                                <span className="font-mono">{user.usageCount}x</span>
-                                            </TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">
-                                                {formatDate(user.lastUsed)}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <a
-                                                    href={user.profileUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="inline-flex items-center gap-1 text-primary hover:underline"
-                                                >
-                                                    View <ExternalLink className="h-4 w-4" />
-                                                </a>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
+                                    users.map((user) => {
+                                        const name = getDisplayName(user)
+                                        const initials = name.slice(0, 2).toUpperCase()
+                                        const profileUrl = user.username
+                                            ? `https://github.com/${user.username}`
+                                            : "#"
+
+                                        return (
+                                            <TableRow key={user.id}>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-3">
+                                                        <Avatar>
+                                                            <AvatarImage src="" alt={name} />
+                                                            <AvatarFallback>{initials}</AvatarFallback>
+                                                        </Avatar>
+                                                        <span className="font-medium">{name}</span>
+                                                    </div>
+                                                </TableCell>
+
+                                                <TableCell>
+                                                    <span className="font-mono">{user.usage_count}x</span>
+                                                </TableCell>
+
+                                                <TableCell className="text-muted-foreground">
+                                                    {formatDate(user.last_used)}
+                                                </TableCell>
+
+                                                <TableCell className="text-right">
+                                                    <a
+                                                        href={profileUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center gap-1 text-primary hover:underline"
+                                                    >
+                                                        View <ExternalLink className="h-4 w-4" />
+                                                    </a>
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    })
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
+                                        <TableCell colSpan={4} className="text-center py-10 text-muted-foreground">
                                             No users yet. Install Forjex and be the first!
                                         </TableCell>
                                     </TableRow>
