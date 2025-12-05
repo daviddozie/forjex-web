@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const { name, username, avatar, profileUrl, timestamp } = body;
 
-        console.log('📥 Received user data:', { username, name });
+        console.log('Received user data:', { username, name });
 
         if (!username) {
             return NextResponse.json(
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
         // Get existing users from Redis
         const users: User[] = await redis.get(USERS_KEY) || [];
-        console.log('📂 Current users count:', users.length);
+        console.log('Current users count:', users.length);
 
         // Check if user already exists
         const existingIndex = users.findIndex((u: User) => u.username === username);
@@ -55,20 +55,20 @@ export async function POST(request: NextRequest) {
         if (existingIndex >= 0) {
             // Update existing user
             users[existingIndex] = userData;
-            console.log('🔄 Updated existing user:', username);
+            console.log('Updated existing user:', username);
         } else {
             // Add new user
             users.push(userData);
-            console.log('✨ Added new user:', username);
+            console.log('Added new user:', username);
         }
 
         // Save to Redis
         await redis.set(USERS_KEY, users);
-        console.log('💾 Saved to Redis successfully');
+        console.log('Saved to Redis successfully');
 
         return NextResponse.json({ success: true, user: userData }, { headers });
     } catch (error) {
-        console.error('❌ Error saving user:', error);
+        console.error('Error saving user:', error);
         return NextResponse.json(
             { error: 'Failed to save user', details: error instanceof Error ? error.message : 'Unknown error' },
             { status: 500, headers }
@@ -84,14 +84,14 @@ export async function GET() {
 
     try {
         const users: User[] = await redis.get(USERS_KEY) || [];
-        console.log('📊 Fetching users, count:', users.length);
+        console.log('Fetching users, count:', users.length);
 
         // Sort by last used (most recent first)
         users.sort((a, b) => new Date(b.lastUsed).getTime() - new Date(a.lastUsed).getTime());
 
         return NextResponse.json({ users }, { headers });
     } catch (error) {
-        console.error('❌ Error fetching users:', error);
+        console.error('Error fetching users:', error);
         return NextResponse.json(
             { error: 'Failed to fetch users' },
             { status: 500, headers }
