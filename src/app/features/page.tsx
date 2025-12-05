@@ -118,11 +118,17 @@ export default function Features() {
                                                 <TableCell>
                                                     <div className="flex items-center gap-3">
                                                         <Avatar>
-                                                            <AvatarImage src="" alt={name} />
-                                                            <AvatarFallback>{initials}</AvatarFallback>
+                                                            <AvatarImage
+                                                                src={user.os || undefined} // Use undefined if no avatar
+                                                                alt={user.username || 'User'}
+                                                            />
+                                                            <AvatarFallback>
+                                                                {user.username ? user.username.slice(0, 2).toUpperCase() : 'NA'}
+                                                            </AvatarFallback>
                                                         </Avatar>
-                                                        <span className="font-medium">{name}</span>
+                                                        <span className="font-medium">{user.username || 'Unknown'}</span>
                                                     </div>
+
                                                 </TableCell>
 
                                                 <TableCell>
