@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
+import Downloads from "@/components/downloads"
 
 interface User {
     id: string
@@ -84,7 +85,8 @@ export default function Analytics() {
             <Navbar />
             <div className="pt-20">
                 <div className="w-[90%] max-w-7xl mx-auto py-10">
-                    <div className="mb-8">
+                    <Downloads userCount={users.length}/>
+                    <div className="mb-8 mt-15">
                         <h1 className="text-4xl font-bold text-foreground">Forjex Users</h1>
                         <p className="text-muted-foreground mt-2">
                             Developers using Forjex to automate their workflows
