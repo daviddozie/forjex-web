@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { Github } from "lucide-react"
 import { Button } from "./ui/button"
-import { Star } from "lucide-react"
 
 export default function GitHubStars() {
     const [stars, setStars] = useState<number | null>(null)
