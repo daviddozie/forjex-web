@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ExternalLink } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface User {
     id: string
@@ -27,9 +28,12 @@ interface User {
     created_at: string
 }
 
-export default function Features() {
+const USERS_PER_PAGE = 6
+
+export default function Analytics() {
     const [users, setUsers] = useState<User[]>([])
     const [loading, setLoading] = useState(true)
+    const [currentPage, setCurrentPage] = useState(1)
 
     useEffect(() => {
         fetchUsers()
@@ -47,10 +51,6 @@ export default function Features() {
         }
     }
 
-    const getDisplayName = (user: User) => {
-        return user.username || user.email || "Unknown User"
-    }
-
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleString('en-US', {
             month: 'short',
@@ -59,6 +59,24 @@ export default function Features() {
             hour: '2-digit',
             minute: '2-digit'
         })
+    }
+
+    // Pagination logic
+    const totalPages = Math.ceil(users.length / USERS_PER_PAGE)
+    const startIndex = (currentPage - 1) * USERS_PER_PAGE
+    const endIndex = startIndex + USERS_PER_PAGE
+    const currentUsers = users.slice(startIndex, endIndex)
+
+    const goToNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prev => prev + 1)
+        }
+    }
+
+    const goToPreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1)
+        }
     }
 
     return (
@@ -77,7 +95,7 @@ export default function Features() {
                         <Table className="w-full">
                             <TableCaption>
                                 {users.length > 0
-                                    ? `A list of ${users.length} developers using Forjex`
+                                    ? `Showing ${startIndex + 1}-${Math.min(endIndex, users.length)} of ${users.length} developers`
                                     : 'No users yet. Be the first to use Forjex!'}
                             </TableCaption>
 
@@ -92,7 +110,7 @@ export default function Features() {
 
                             <TableBody>
                                 {loading ? (
-                                    Array.from({ length: 5 }).map((_, i) => (
+                                    Array.from({ length: USERS_PER_PAGE }).map((_, i) => (
                                         <TableRow key={i}>
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
@@ -105,13 +123,16 @@ export default function Features() {
                                             <TableCell><Skeleton className="h-4 w-16 ml-auto" /></TableCell>
                                         </TableRow>
                                     ))
-                                ) : users.length > 0 ? (
-                                    users.map((user) => {
-                                        const name = getDisplayName(user)
-                                        const initials = name.slice(0, 2).toUpperCase()
+                                ) : currentUsers.length > 0 ? (
+                                    currentUsers.map((user) => {
+                                        const displayName = user.username || user.email?.split('@')[0] || 'Anonymous'
+                                        const avatarUrl = user.username
+                                            ? `https://github.com/${user.username}.png`
+                                            : `https://api.dicebear.com/7.x/initials/svg?seed=${displayName}`
                                         const profileUrl = user.username
                                             ? `https://github.com/${user.username}`
                                             : "#"
+                                        const initials = displayName.slice(0, 2).toUpperCase()
 
                                         return (
                                             <TableRow key={user.id}>
@@ -119,35 +140,47 @@ export default function Features() {
                                                     <div className="flex items-center gap-3">
                                                         <Avatar>
                                                             <AvatarImage
-                                                                src={user.os || undefined} // Use undefined if no avatar
-                                                                alt={user.username || 'User'}
+                                                                src={avatarUrl}
+                                                                alt={displayName}
                                                             />
                                                             <AvatarFallback>
-                                                                {user.username ? user.username.slice(0, 2).toUpperCase() : 'NA'}
+                                                                {initials}
                                                             </AvatarFallback>
                                                         </Avatar>
-                                                        <span className="font-medium">{user.username || 'Unknown'}</span>
+                                                        <div className="flex flex-col">
+                                                            <span className="font-medium">{displayName}</span>
+                                                            {user.email && user.username && (
+                                                                <span className="text-xs text-muted-foreground">
+                                                                    {user.email}
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                     </div>
-
                                                 </TableCell>
 
                                                 <TableCell>
-                                                    <span className="font-mono">{user.usage_count}x</span>
+                                                    <span className="font-mono font-semibold">
+                                                        {user.usage_count}x
+                                                    </span>
                                                 </TableCell>
 
-                                                <TableCell className="text-muted-foreground">
+                                                <TableCell className="text-muted-foreground text-sm">
                                                     {formatDate(user.last_used)}
                                                 </TableCell>
 
                                                 <TableCell className="text-right">
-                                                    <a
-                                                        href={profileUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="inline-flex items-center gap-1 text-primary hover:underline"
-                                                    >
-                                                        View <ExternalLink className="h-4 w-4" />
-                                                    </a>
+                                                    {user.username ? (
+                                                        <a
+                                                            href={profileUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center gap-1 text-primary hover:underline"
+                                                        >
+                                                            View <ExternalLink className="h-4 w-4" />
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-muted-foreground text-sm">N/A</span>
+                                                    )}
                                                 </TableCell>
                                             </TableRow>
                                         )
@@ -161,6 +194,35 @@ export default function Features() {
                                 )}
                             </TableBody>
                         </Table>
+
+                        {/* Pagination Controls */}
+                        {!loading && users.length > USERS_PER_PAGE && (
+                            <div className="flex items-center justify-between px-6 py-4 border-t">
+                                <div className="text-sm text-muted-foreground">
+                                    Page {currentPage} of {totalPages}
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={goToPreviousPage}
+                                        disabled={currentPage === 1}
+                                    >
+                                        <ChevronLeft className="h-4 w-4 mr-1" />
+                                        Previous
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={goToNextPage}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        Next
+                                        <ChevronRight className="h-4 w-4 ml-1" />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
