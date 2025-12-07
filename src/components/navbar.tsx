@@ -25,7 +25,7 @@ export const Navbar = () => {
         { name: "Docs", href: "/docs" },
         { name: "Guides", href: "/guides" },
         { name: "Analytics", href: "/analytics" },
-        { name: "API", href: "#" },
+        { name: "Features", href: "/features" },
     ];
 
     useEffect(() => setMounted(true), []);
