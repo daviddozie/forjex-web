@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://forjex-web.vercel.app/"),
+  metadataBase: new URL("https://forjex.vercel.app/"),
   title: {
     default: "Forjex",
     template: "%s | Forjex"
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-    url: "https://forjex-web.vercel.app/",
+    url: "https://forjex.vercel.app/",
     title: "Forjex",
     description:
       "Forjex is a powerful CLI tool that helps developers generate new repositories, automate setups, streamline project creation, and generate perfect commit messages.",
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   },
 
   alternates: {
-    canonical: "https://forjex-web.vercel.app/",
+    canonical: "https://forjex.vercel.app/",
   },
 };
 
