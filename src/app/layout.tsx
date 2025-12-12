@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     siteName: "Forjex",
     images: [
       {
-        url: "https://vocational-brown-pigctefcj5-fiqs263154.edgeone.dev/Screenshot%202025-12-04%20at%204.05.52%E2%80%AFPM.png",
+        url: "https://drive.google.com/file/d/1gVDuFVT0KQmDwqZsVm8DReY8qULe3bhL/view?usp=sharing",
         width: 1200,
         height: 630,
         alt: "Forjex",
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     title: "Forjex — Automate Your Git Workflow",
     description:
       "AI-powered Git commit generator. Detect, analyze, and commit changes effortlessly.",
-    images: ["https://vocational-brown-pigctefcj5-fiqs263154.edgeone.dev/Screenshot%202025-12-04%20at%204.05.52%E2%80%AFPM.png"],
+    images: ["https://drive.google.com/file/d/1gVDuFVT0KQmDwqZsVm8DReY8qULe3bhL/view?usp=sharing"],
     creator: "@forjex",
   },
 

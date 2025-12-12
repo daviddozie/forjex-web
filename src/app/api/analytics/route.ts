@@ -1,4 +1,3 @@
-// src/app/api/analytics/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -33,7 +32,6 @@ export function OPTIONS() {
     return NextResponse.json({}, { headers: CORS_HEADERS });
 }
 
-// Define the User type based on your database schema
 interface User {
     id: string;
     username: string | null;
@@ -73,7 +71,6 @@ async function fetchNPMDownloads(period: 'last-week' | 'last-month' | 'last-year
     }
 }
 
-// Fetch daily NPM downloads for chart
 async function fetchDailyNPMDownloads() {
     try {
         const response = await fetch(
@@ -95,7 +92,6 @@ export async function GET() {
     try {
         const supabase = getSupabase();
 
-        // Get total users from Supabase
         const { data: allUsers, error: usersError } = await supabase
             .from("cli_tracking")
             .select("*")
@@ -103,7 +99,6 @@ export async function GET() {
 
         if (usersError) throw usersError;
 
-        // Fetch NPM download stats
         const [weeklyDownloads, monthlyDownloads, yearlyDownloads, dailyDownloads] = await Promise.all([
             fetchNPMDownloads('last-week'),
             fetchNPMDownloads('last-month'),
@@ -111,7 +106,6 @@ export async function GET() {
             fetchDailyNPMDownloads()
         ]);
 
-        // Process daily downloads for chart
         const weeklyData = dailyDownloads?.map((item: any) => {
             const date = new Date(item.day);
             return {
@@ -127,7 +121,7 @@ export async function GET() {
             };
         });
 
-        // Calculate growth percentage (last 30 days vs previous 30 days)
+        
         const previousMonthDownloads = (monthlyDownloads || 0) - (weeklyDownloads || 0);
         const growthPercentage = previousMonthDownloads > 0 
             ? (((weeklyDownloads || 0) / previousMonthDownloads - 1) * 100).toFixed(1)
