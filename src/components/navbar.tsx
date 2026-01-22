@@ -113,7 +113,7 @@ export const Navbar = () => {
                 </button>
                 <div className="flex items-center gap-4 md:hidden">
                     <ThemeToggle />
-                     <GitHubStars />
+                    <GitHubStars />
                     <button
                         className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700"
                         onClick={() => setIsOpen(!isOpen)}
@@ -138,18 +138,16 @@ export const Navbar = () => {
                         {navLinks.map((link) => {
                             const isActive = pathname === link.href;
                             return (
-                                <>
-                                    <a
-                                        key={link.name}
-                                        href={link.href}
-                                        className={`transition-colors duration-300 text-sm font-medium ${isActive
-                                            ? "text-black dark:text-white"
-                                            : "text-[#848484] hover:text-black dark:hover:text-white"
-                                            }`}
-                                    >
-                                        {link.name}
-                                    </a>
-                                </>
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    className={`transition-colors duration-300 text-sm font-medium ${isActive
+                                        ? "text-black dark:text-white"
+                                        : "text-[#848484] hover:text-black dark:hover:text-white"
+                                        }`}
+                                >
+                                    {link.name}
+                                </a>
                             );
                         })}
                         <Button onClick={() => router.push('/guides')}>
