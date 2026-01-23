@@ -15,6 +15,7 @@ export default function Feature() {
                     </p>
                 </div>
                 <div className="mt-10">
+                    
                     <h1 className="font-bold md:text-5xl text-2xl text-foreground text-center md:leading-15">
                         Features
                     </h1>
